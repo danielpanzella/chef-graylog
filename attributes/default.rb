@@ -18,7 +18,13 @@ when "debian"
     default[:graylog2][:apache2][:module_build_packages] = ["libcurl4-openssl-dev","apache2-threaded-dev","libapr1-dev","libaprutil1-dev"]
 end
 
-default[:elasticsearch][:version] = "0.20.4"
+default.elasticsearch[:version]       = "0.20.4"
+default.elasticsearch[:host]          = "http://download.elasticsearch.org"
+default.elasticsearch[:repository]    = "elasticsearch/elasticsearch"
+default.elasticsearch[:filename]      = "elasticsearch-#{node.elasticsearch[:version]}.tar.gz"
+default.elasticsearch[:download_url]  = [node.elasticsearch[:host], node.elasticsearch[:repository], node.elasticsearch[:filename]].join('/')
+
+default[:elasticsearch][:cluster][:name] = "graylog2"
 
 default[:graylog2][:mongodb][:host] = "localhost"
 default[:graylog2][:mongodb][:port] = 27017

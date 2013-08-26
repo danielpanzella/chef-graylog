@@ -15,7 +15,7 @@ depends "apt"     # http://community.opscode.com/cookbooks/apt
 depends "yum"
 depends "java"
 depends "apache2" # http://community.opscode.com/cookbooks/apache2
-depends "mongodb" # 
+depends "mongodb", ">= 0.13.0" # https://github.com/edelight/chef-mongodb
 depends "rbenv"   # http://community.opscode.com/cookbooks/rbenv
 depends "build-essential"
 depends "postfix"

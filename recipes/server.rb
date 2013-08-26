@@ -19,7 +19,7 @@
 
 # Install MongoDB from 10gen repository
 include_recipe "mongodb::10gen_repo"
-include_recipe "mongodb::configserver"
+include_recipe "mongodb::default"
 
 include_recipe "java"
 
@@ -64,7 +64,7 @@ template "/etc/init.d/graylog2" do
 end
 
 # Service resource
-service "elasticsearch" do
+service "mongod" do
   supports :restart => true
   action [:enable, :start]
 end

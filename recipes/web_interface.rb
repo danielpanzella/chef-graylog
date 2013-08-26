@@ -18,9 +18,10 @@
 #
 
 # Install required APT packages
-package "build-essential"
-if node.graylog2.email_package
-    package node.graylog2.email_package
+include_recipe "build-essential"
+
+if node.graylog2.configure_email
+    include_recipe "postfix"
 end
 
 # Install rbenv
@@ -46,7 +47,7 @@ end
 # Download the desired version of Graylog2 web interface from GitHub
 remote_file "download_web_interface" do
   path "#{node[:graylog2][:basedir]}/rel/graylog2-web-interface-#{node[:graylog2][:web_interface][:version]}.tar.gz"
-  source "https://github.com/Graylog2/graylog2-web-interface/archive/#{node[:graylog2][:web_interface][:version]}.tar.gz"
+  source "https://github.com/Graylog2/graylog2-web-interface/releases/download/#{node[:graylog2][:web_interface][:version]}/graylog2-web-interface-#{node[:graylog2][:web_interface][:version]}.tar.gz"
   action :create_if_missing
 end
 
@@ -78,8 +79,8 @@ external_hostname = node[:graylog2][:external_hostname]     ? node[:graylog2][:e
 
 # Create general.yml
 template "#{node.graylog2.basedir}/web/config/general.yml" do
-  owner "nobody"
-  group "nogroup"
+  owner node[:graylog2][:web_interface][:file_owner]
+  group node[:graylog2][:web_interface][:file_group]
   mode 0644
   variables( :external_hostname => external_hostname )
 end
@@ -87,14 +88,22 @@ end
 # Create config files
 %w{ indexer ldap mongoid }.each do |yml_file|
   template "#{node[:graylog2][:basedir]}/web/config/#{yml_file}.yml" do
-    owner "nobody"
-    group "nogroup"
+    owner node[:graylog2][:web_interface][:file_owner]
+    group node[:graylog2][:web_interface][:file_group]
     mode 0644
   end
 end
 
+template "#{node.graylog2.basedir}/web/config/initializers/secret_token.rb" do
+  source "secret_token.rb.erb"
+  owner node[:graylog2][:web_interface][:file_owner]
+  group node[:graylog2][:web_interface][:file_group]
+  mode 0644
+end
+
+
 # Chown the Graylog2 directory to nobody/nogroup to allow web servers to serve it
-execute "sudo chown -R nobody:nogroup graylog2-web-interface-#{node[:graylog2][:web_interface][:version]}" do
+execute "sudo chown -R #{node[:graylog2][:web_interface][:file_owner]}:#{node[:graylog2][:web_interface][:file_group]} graylog2-web-interface-#{node[:graylog2][:web_interface][:version]}" do
   cwd "#{node[:graylog2][:basedir]}/rel"
   not_if do
     File.stat("#{node[:graylog2][:basedir]}/rel/graylog2-web-interface-#{node[:graylog2][:web_interface][:version]}").uid == 65534

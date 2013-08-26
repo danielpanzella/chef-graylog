@@ -9,9 +9,9 @@
     Allow from all
     Options -MultiViews
   </Directory>
-  ErrorLog /var/log/apache2/error.log
+  ErrorLog <%= node['apache']['log_dir'] %>/error.log
   LogLevel warn
-  CustomLog /var/log/apache2/access.log combined
+  CustomLog <%= node['apache']['log_dir'] %>/access.log combined
 
   LoadModule passenger_module /opt/rbenv/versions/<%= node[:graylog2][:ruby_version] %>/lib/ruby/gems/1.9.1/gems/passenger-<%= node[:graylog2][:passenger_version] %>/libout/apache2/mod_passenger.so
   PassengerRoot /opt/rbenv/versions/<%= node[:graylog2][:ruby_version] %>/lib/ruby/gems/1.9.1/gems/passenger-<%= node[:graylog2][:passenger_version] %>

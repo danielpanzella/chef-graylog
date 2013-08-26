@@ -19,10 +19,9 @@
 
 # Install MongoDB from 10gen repository
 include_recipe "mongodb::10gen_repo"
-include_recipe "mongodb::default"
+include_recipe "mongodb::configserver"
 
-# Install required APT packages
-package "openjdk-7-jre"
+include_recipe "java"
 
 # Create the release directory
 directory "#{node[:graylog2][:basedir]}/rel" do
@@ -30,24 +29,12 @@ directory "#{node[:graylog2][:basedir]}/rel" do
   recursive true
 end
 
-# Download the elasticsearch dpkg
-
-remote_file "elasticsearch_dpkg" do
-    path "#{node[:graylog2][:basedir]}/rel/elasticsearch-#{node[:graylog2][:elasticsearch][:version]}.deb"
-    source "#{node[:graylog2][:elasticsearch][:repo]}/elasticsearch-#{node[:graylog2][:elasticsearch][:version]}.deb"
-    action :create_if_missing
-end
-
-dpkg_package "elasticsearch" do
-    source "#{node[:graylog2][:basedir]}/rel/elasticsearch-#{node[:graylog2][:elasticsearch][:version]}.deb"
-    version node[:graylog2][:elasticsearch][:version]
-    action :install
-end
+include_recipe "elasticsearch"
 
 # Download the desired version of Graylog2 server from GitHub
 remote_file "download_server" do
   path "#{node[:graylog2][:basedir]}/rel/graylog2-server-#{node[:graylog2][:server][:version]}.tar.gz"
-  source "#{node[:graylog2][:repo]}/graylog2-server/graylog2-server-#{node[:graylog2][:server][:version]}.tar.gz"
+  source "https://github.com/Graylog2/graylog2-server/releases/download/#{node[:graylog2][:server][:version]}/graylog2-server-#{node[:graylog2][:server][:version]}.tar.gz"
   action :create_if_missing
 end
 
@@ -74,13 +61,6 @@ end
 template "/etc/init.d/graylog2" do
   source "graylog2.init.erb"
   mode 0755
-end
-
-# Update the rc.d system
-execute "update-rc.d graylog2 defaults" do
-  creates "/etc/rc0.d/K20graylog2"
-  action :nothing
-  subscribes :run, resources(:template => "/etc/init.d/graylog2"), :immediately
 end
 
 # Service resource

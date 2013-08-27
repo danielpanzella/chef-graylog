@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs and configures a Graylog2 server on Ubuntu systems (10.04 and up at present).
+Installs and configures a Graylog2 server on Ubuntu (10.04 and up at present) and Centos (Tested on 6.4) systems.
 
 This is a Chef re-engineering of the [Sean Porter][seanp] Linode [StackScript for graylog2][stackscript].
 

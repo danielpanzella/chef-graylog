@@ -1,6 +1,6 @@
 default[:graylog2][:basedir] = "/var/graylog2"
-default[:graylog2][:server][:version] = "0.11.0"
-default[:graylog2][:web_interface][:version] = "0.11.0"
+default[:graylog2][:server][:version] = "0.12.0"
+default[:graylog2][:web_interface][:version] = "0.12.0"
 default[:graylog2][:web_interface][:listen_port] = 4500 # if this is not 80 you need to override default['apache']['listen_ports'] = [ "80" ] 
 default[:graylog2][:web_interface][:secret_key] = "CHANGE ME"
 default[:graylog2][:web_interface][:file_owner] = "nobody"
@@ -17,6 +17,10 @@ when "rhel"
 when "debian"
     default[:graylog2][:apache2][:module_build_packages] = ["libcurl4-openssl-dev","apache2-threaded-dev","libapr1-dev","libaprutil1-dev"]
 end
+
+default[:rbenv][:git_repository] = "https://github.com/sstephenson/rbenv.git"
+default[:ruby_build][:git_repository] = "https://github.com/sstephenson/ruby-build.git"
+default[:rbenv_vars][:git_repository] = "https://github.com/sstephenson/rbenv-vars.git"
 
 default.elasticsearch[:version]       = "0.20.4"
 default.elasticsearch[:host]          = "http://download.elasticsearch.org"

@@ -79,6 +79,7 @@ external_hostname = node[:graylog2][:external_hostname]     ? node[:graylog2][:e
 
 # Create general.yml
 template "#{node.graylog2.basedir}/web/config/general.yml" do
+  source "general.yml.erb"
   owner node[:graylog2][:web_interface][:file_owner]
   group node[:graylog2][:web_interface][:file_group]
   mode 0644
@@ -88,6 +89,7 @@ end
 # Create config files
 %w{ indexer ldap mongoid }.each do |yml_file|
   template "#{node[:graylog2][:basedir]}/web/config/#{yml_file}.yml" do
+    source "#{yml_file}.yml.erb"
     owner node[:graylog2][:web_interface][:file_owner]
     group node[:graylog2][:web_interface][:file_group]
     mode 0644

@@ -1,5 +1,21 @@
-.DS_Store
-*.swp
-.chef/
-.vagrant
-tmp
+- .DS_Store
+- *.swp
+- .chef/
+  .vagrant
+- tmp
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+/cookbooks
+
+# Bundler
+Gemfile.lock
+bin/*
+.bundle/*
+
+.kitchen/
+.kitchen.local.yml

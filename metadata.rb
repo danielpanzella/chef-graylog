@@ -3,7 +3,7 @@ maintainer        "Phil Sturgeon"
 maintainer_email  "email@philsturgeon.co.uk"
 license           "Apache 2.0"
 description       "Installs and configures Graylog2"
-version           "0.1.0"
+version           "0.1.1"
 recipe            "graylog2", "Installs and configures Graylog2"
 
 %w{ ubuntu centos }.each do |os|
@@ -20,3 +20,4 @@ depends "rbenv"   # http://community.opscode.com/cookbooks/rbenv
 depends "build-essential"
 depends "postfix"
 depends "elasticsearch"
+depends "passenger_apache2"
